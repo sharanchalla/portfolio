@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Sharan Challa</title>
+    <script src="/js/theme.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <style>
+        .filter-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .search-bar {
+            max-width: 350px;
+            width: 100%;
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            transition: var(--transition-fast);
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+        .filter-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background-color: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+        .filter-btn:hover,
+        .filter-btn.active {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .no-projects {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container navbar">
+            <a href="/" class="logo">
+                Sharan Challa<span class="logo-dot"></span>
+            </a>
+            <nav class="nav-menu" id="navMenu">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/projects" class="nav-link active">Projects</a>
+                <a href="/skills" class="nav-link">Skills</a>
+                <a href="/certificates" class="nav-link">Certificates</a>
+                <a href="/contact" class="nav-link">Contact</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
+                    <svg class="moon-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="sun-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container section">
+        <div class="section-header slide-up">
+            <span class="section-tag">Case Studies</span>
+            <h1 class="section-title">My Projects</h1>
+        </div>
+
+        <!-- Filter & Search Bar -->
+        <div class="filter-container slide-up delay-1">
+            <div class="search-bar">
+                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="searchInput" placeholder="Search projects by title or tech..." class="search-input">
+            </div>
+            
+            <div class="filter-tags" id="filterTags">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="python">Python</button>
+                <button class="filter-btn" data-filter="flask">Flask</button>
+                <button class="filter-btn" data-filter="javascript">JavaScript</button>
+                <button class="filter-btn" data-filter="css">CSS</button>
+            </div>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects-grid" id="projectsGrid">
+            {% if projects %}
+                {% for project in projects %}
+                <article class="project-card slide-up delay-{{ loop.index }}" data-title="{{ project.title|lower }}" data-tech="{{ project.technologies|lower }}">
+                    <div class="project-img-wrapper">
+                        <img src="{{ project.image_url or 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80' }}" alt="{{ project.title }}">
+                    </div>
+                    <div class="project-details">
+                        <div class="project-tech">
+                            {% for tech in project.technologies.split(',') %}
+                                <span class="tech-tag">{{ tech.strip() }}</span>
+                            {% endfor %}
+                        </div>
+                        <h3 class="project-card-title">{{ project.title }}</h3>
+                        <p class="project-desc">{{ project.description }}</p>
+                        <div class="project-links">
+                            {% if project.live_link %}
+                                <a href="{{ project.live_link }}" target="_blank" class="project-link">
+                                    Demo
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                </a>
+                            {% endif %}
+                            {% if project.repo_link %}
+                                <a href="{{ project.repo_link }}" target="_blank" class="project-link">
+                                    GitHub
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            {% else %}
+                <div class="no-projects">No projects loaded from database yet.</div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-wrapper">
+            <div class="footer-copy">&copy; 2026 Sharan Challa. All rights reserved.</div>
+            <div class="social-links">
+                <a href="#" class="social-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+                <a href="#" class="social-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+    <script>
+        // Real-time Search and Category Filtering Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const projectCards = document.querySelectorAll('.project-card');
+
+            let searchVal = '';
+            let currentFilter = 'all';
+
+            const filterProjects = () => {
+                let count = 0;
+                projectCards.forEach(card => {
+                    const title = card.getAttribute('data-title');
+                    const tech = card.getAttribute('data-tech');
+                    
+                    const matchesSearch = title.includes(searchVal) || tech.includes(searchVal);
+                    const matchesFilter = currentFilter === 'all' || tech.includes(currentFilter);
+
+                    if (matchesSearch && matchesFilter) {
+                        card.style.display = 'flex';
+                        count++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // Display empty message if no results
+                let emptyMsg = document.getElementById('emptyFilterMsg');
+                if (count === 0 && projectCards.length > 0) {
+                    if (!emptyMsg) {
+                        emptyMsg = document.createElement('div');
+                        emptyMsg.id = 'emptyFilterMsg';
+                        emptyMsg.className = 'no-projects';
+                        emptyMsg.innerHTML = 'No projects match your search criteria.';
+                        document.getElementById('projectsGrid').appendChild(emptyMsg);
+                    }
+                } else if (emptyMsg) {
+                    emptyMsg.remove();
+                }
+            };
+
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    searchVal = e.target.value.toLowerCase().trim();
+                    filterProjects();
+                });
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    currentFilter = e.target.getAttribute('data-filter');
+                    filterProjects();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

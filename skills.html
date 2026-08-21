@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills | Sharan Challa</title>
+    <script src="/js/theme.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container navbar">
+            <a href="/" class="logo">
+                Sharan Challa<span class="logo-dot"></span>
+            </a>
+            <nav class="nav-menu" id="navMenu">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/projects" class="nav-link">Projects</a>
+                <a href="/skills" class="nav-link active">Skills</a>
+                <a href="/certificates" class="nav-link">Certificates</a>
+                <a href="/contact" class="nav-link">Contact</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
+                    <svg class="moon-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="sun-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container section">
+        <div class="section-header slide-up">
+            <span class="section-tag">Tech Stack</span>
+            <h1 class="section-title">Professional Skills</h1>
+        </div>
+
+        <div class="skills-grid">
+            {% if categorized_skills %}
+                {% for category, skills in categorized_skills.items() %}
+                <div class="skill-category-card slide-up delay-{{ loop.index }}">
+                    <h2 class="skill-category-title">
+                        <span>{{ category }}</span>
+                    </h2>
+                    <div class="skill-list">
+                        {% for skill in skills %}
+                        <div class="skill-item">
+                            <div class="skill-info">
+                                <span class="skill-name">{{ skill.name }}</span>
+                                <span class="skill-percentage">{{ skill.proficiency }}%</span>
+                            </div>
+                            <div class="skill-bar-container">
+                                <div class="skill-bar" data-progress="{{ skill.proficiency }}"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Fallback static content for local file view -->
+                <div class="skill-category-card slide-up">
+                    <h2 class="skill-category-title">Backend</h2>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-info"><span>Python / Flask / Django</span><span>90%</span></div>
+                            <div class="skill-bar-container"><div class="skill-bar" data-progress="90"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info"><span>REST APIs & JSON</span><span>88%</span></div>
+                            <div class="skill-bar-container"><div class="skill-bar" data-progress="88"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category-card slide-up delay-1">
+                    <h2 class="skill-category-title">Frontend</h2>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-info"><span>HTML5 / CSS3 / JavaScript</span><span>85%</span></div>
+                            <div class="skill-bar-container"><div class="skill-bar" data-progress="85"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info"><span>Responsive UI Design</span><span>82%</span></div>
+                            <div class="skill-bar-container"><div class="skill-bar" data-progress="82"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category-card slide-up delay-2">
+                    <h2 class="skill-category-title">Database & Tools</h2>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <div class="skill-info"><span>SQL (SQLite / PostgreSQL)</span><span>80%</span></div>
+                            <div class="skill-bar-container"><div class="skill-bar" data-progress="80"></div></div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-info"><span>Git & Version Control</span><span>85%</span></div>
+                            <div class="skill-bar-container"><div class="skill-bar" data-progress="85"></div></div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-wrapper">
+            <div class="footer-copy">&copy; 2026 Sharan Challa. All rights reserved.</div>
+            <div class="social-links">
+                <a href="#" class="social-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+                <a href="#" class="social-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
+

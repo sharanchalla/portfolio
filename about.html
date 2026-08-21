@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | Sharan Challa</title>
+    <script src="/js/theme.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <style>
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: flex-start;
+        }
+        .about-text {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 2px solid var(--border-color);
+            margin-top: 2rem;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: calc(-2rem - 6px);
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            border: 2px solid var(--bg-primary);
+        }
+        .timeline-date {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+        .timeline-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+        .timeline-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container navbar">
+            <a href="/" class="logo">
+                Sharan Challa<span class="logo-dot"></span>
+            </a>
+            <nav class="nav-menu" id="navMenu">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/about" class="nav-link active">About</a>
+                <a href="/projects" class="nav-link">Projects</a>
+                <a href="/skills" class="nav-link">Skills</a>
+                <a href="/certificates" class="nav-link">Certificates</a>
+                <a href="/contact" class="nav-link">Contact</a>
+            </nav>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
+                    <svg class="moon-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="sun-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                </button>
+                <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container section">
+        <div class="section-header slide-up">
+            <span class="section-tag">My Journey</span>
+            <h1 class="section-title">About Me</h1>
+        </div>
+
+        <div class="about-grid">
+            <div class="about-text slide-in-left">
+                <h2>I'm a Developer driven by logic & creative design.</h2>
+                <p>
+                    Based in India, I focus on building robust backend services with Flask and crafting interactive interfaces that provide seamless user experiences. I graduated with a degree in Computer Science and have worked on various software engineering tasks.
+                </p>
+                <p>
+                    I value performance, readability, and modern aesthetics. When I'm not writing code, you can find me researching system architectures, contributing to projects, or learning about new web technologies.
+                </p>
+                <div style="margin-top: 1rem;">
+                    <a href="/contact" class="btn btn-primary">Work with Me</a>
+                </div>
+            </div>
+
+            <div class="slide-in-right delay-1">
+                <h2>Experience & Education</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">2025 - Present</div>
+                        <h3 class="timeline-title">Junior Software Engineer</h3>
+                        <div class="timeline-subtitle">TechCorp Solutions</div>
+                        <p class="timeline-desc">Responsible for developing RESTful APIs, designing SQLite databases, and refactoring backend code structures for production services.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2024 - 2025</div>
+                        <h3 class="timeline-title">Web Application Intern</h3>
+                        <div class="timeline-subtitle">Innovate Systems</div>
+                        <p class="timeline-desc">Assisted in setting up modular Flask blueprints and optimizing styling configurations using CSS variables and media queries.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2020 - 2024</div>
+                        <h3 class="timeline-title">B.Tech in Computer Science</h3>
+                        <div class="timeline-subtitle">State University</div>
+                        <p class="timeline-desc">Acquired strong foundations in Object-Oriented Programming, Database Management, Algorithms, and Full-Stack Engineering.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-wrapper">
+            <div class="footer-copy">&copy; 2026 Sharan Challa. All rights reserved.</div>
+            <div class="social-links">
+                <a href="#" class="social-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+                <a href="#" class="social-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/script.js"></script>
+</body>
+</html>
+
