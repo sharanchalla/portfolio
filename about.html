@@ -104,7 +104,7 @@
             <div class="about-text slide-in-left">
                 <h2>I'm a Developer driven by logic & creative design.</h2>
                 <p>
-                    Based in India, I focus on building robust backend services with Flask and crafting interactive interfaces that provide seamless user experiences. I graduated with a degree in Computer Science and have worked on various software engineering tasks.
+                    Based in Rajahmundry, East Godavari District, Andhra Pradesh, India, I focus on building robust backend services with Flask and crafting interactive interfaces that provide seamless user experiences. I graduated with a degree in Computer Science and have worked on various software engineering tasks.
                 </p>
                 <p>
                     I value performance, readability, and modern aesthetics. When I'm not writing code, you can find me researching system architectures, contributing to projects, or learning about new web technologies.
@@ -117,24 +117,23 @@
             <div class="slide-in-right delay-1">
                 <h2>Experience & Education</h2>
                 <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-date">2025 - Present</div>
-                        <h3 class="timeline-title">Junior Software Engineer</h3>
-                        <div class="timeline-subtitle">TechCorp Solutions</div>
-                        <p class="timeline-desc">Responsible for developing RESTful APIs, designing SQLite databases, and refactoring backend code structures for production services.</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">2024 - 2025</div>
-                        <h3 class="timeline-title">Web Application Intern</h3>
-                        <div class="timeline-subtitle">Innovate Systems</div>
-                        <p class="timeline-desc">Assisted in setting up modular Flask blueprints and optimizing styling configurations using CSS variables and media queries.</p>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-date">2020 - 2024</div>
-                        <h3 class="timeline-title">B.Tech in Computer Science</h3>
-                        <div class="timeline-subtitle">State University</div>
-                        <p class="timeline-desc">Acquired strong foundations in Object-Oriented Programming, Database Management, Algorithms, and Full-Stack Engineering.</p>
-                    </div>
+                    {% if experiences %}
+                        {% for exp in experiences %}
+                        <div class="timeline-item">
+                            <div class="timeline-date">{{ exp.period }}</div>
+                            <h3 class="timeline-title">{{ exp.title }}</h3>
+                            <div class="timeline-subtitle">{{ exp.organization }}</div>
+                            <p class="timeline-desc">{{ exp.description }}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="timeline-item">
+                            <div class="timeline-date">2024 - Present</div>
+                            <h3 class="timeline-title">Python Developer & AI-Native Full-Stack Developer</h3>
+                            <div class="timeline-subtitle">Tech Projects</div>
+                            <p class="timeline-desc">Building modern full-stack web applications, integrating AI workflows, creating Flask REST APIs, and designing responsive interfaces.</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -144,8 +143,8 @@
         <div class="container footer-wrapper">
             <div class="footer-copy">&copy; 2026 Sharan Challa. All rights reserved.</div>
             <div class="social-links">
-                <a href="#" class="social-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                <a href="#" class="social-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                <a href="https://www.github.com/sharanchalla" target="_blank" class="social-link" aria-label="GitHub"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+                <a href="https://www.linkedin.com/in/sharan-challa" target="_blank" class="social-link" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
             </div>
         </div>
     </footer>
@@ -153,4 +152,5 @@
     <script src="/js/script.js"></script>
 </body>
 </html>
+
 
