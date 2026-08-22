@@ -8,6 +8,122 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/responsive.css">
     <link rel="stylesheet" href="/css/animations.css">
+    <style>
+        .certificates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .cert-card-media {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+        }
+
+        .cert-card-media:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .cert-img-container {
+            width: 100%;
+            height: 220px;
+            background-color: var(--bg-primary);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cert-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+            transition: transform var(--transition-normal);
+        }
+
+        .cert-card-media:hover .cert-img-container img {
+            transform: scale(1.03);
+        }
+
+        .cert-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .cert-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        .cert-org {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .cert-meta {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Modal Overlay for viewing full certificate */
+        .cert-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        .cert-modal.open {
+            display: flex;
+        }
+
+        .cert-modal-content {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .cert-modal-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10000;
+        }
+    </style>
 </head>
 <body>
     <header class="header">
@@ -44,63 +160,43 @@
         <div class="certificates-grid">
             {% if certificates %}
                 {% for cert in certificates %}
-                <article class="certificate-card slide-up delay-{{ loop.index }}">
-                    <div class="cert-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <article class="cert-card-media slide-up delay-{{ loop.index }}">
+                    <div class="cert-img-container" onclick="openCertModal('{{ cert.image_url or '/images/certificates/oracle_cert.png' }}')">
+                        <img src="{{ cert.image_url or '/images/certificates/oracle_cert.png' }}" alt="{{ cert.title }}">
                     </div>
-                    <h3 class="cert-title">{{ cert.title }}</h3>
-                    <p class="cert-org">{{ cert.issuing_organization }}</p>
-                    <div class="cert-meta">
-                        <span>Issued: {{ cert.issue_date }}</span>
-                        {% if cert.credential_url %}
-                            <a href="{{ cert.credential_url }}" target="_blank" class="cert-link">
-                                Verify
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                            </a>
-                        {% endif %}
+                    <div class="cert-body">
+                        <h3 class="cert-title">{{ cert.title }}</h3>
+                        <p class="cert-org">{{ cert.issuing_organization }}</p>
+                        <div class="cert-meta">
+                            <span>Issued: {{ cert.issue_date }}</span>
+                            <button onclick="openCertModal('{{ cert.image_url or '/images/certificates/oracle_cert.png' }}')" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Official Image</button>
+                        </div>
                     </div>
                 </article>
                 {% endfor %}
             {% else %}
-                <!-- Fallback static content for local file view -->
-                <article class="certificate-card slide-up">
-                    <div class="cert-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <article class="cert-card-media slide-up">
+                    <div class="cert-img-container" onclick="openCertModal('/images/certificates/oracle_cert.png')">
+                        <img src="/images/certificates/oracle_cert.png" alt="Oracle Certified Foundations Associate">
                     </div>
-                    <h3 class="cert-title">Advanced Python & Flask Development</h3>
-                    <p class="cert-org">Tech Academy</p>
-                    <div class="cert-meta">
-                        <span>Issued: June 2025</span>
-                        <a href="#" class="cert-link">Verify</a>
-                    </div>
-                </article>
-
-                <article class="certificate-card slide-up delay-1">
-                    <div class="cert-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    </div>
-                    <h3 class="cert-title">Full-Stack Software Engineering</h3>
-                    <p class="cert-org">Global Tech Institute</p>
-                    <div class="cert-meta">
-                        <span>Issued: December 2025</span>
-                        <a href="#" class="cert-link">Verify</a>
-                    </div>
-                </article>
-
-                <article class="certificate-card slide-up delay-2">
-                    <div class="cert-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    </div>
-                    <h3 class="cert-title">Responsive Web Design Specialist</h3>
-                    <p class="cert-org">FreeCodeCamp</p>
-                    <div class="cert-meta">
-                        <span>Issued: April 2025</span>
-                        <a href="#" class="cert-link">Verify</a>
+                    <div class="cert-body">
+                        <h3 class="cert-title">Oracle Certified Foundations Associate</h3>
+                        <p class="cert-org">Oracle University</p>
+                        <div class="cert-meta">
+                            <span>Issued: October 31, 2025</span>
+                            <button onclick="openCertModal('/images/certificates/oracle_cert.png')" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Image</button>
+                        </div>
                     </div>
                 </article>
             {% endif %}
         </div>
     </main>
+
+    <!-- Certificate Modal -->
+    <div id="certModal" class="cert-modal" onclick="closeCertModal()">
+        <span class="cert-modal-close" onclick="closeCertModal()">&times;</span>
+        <img id="certModalImg" class="cert-modal-content" src="" alt="Enlarged Certificate">
+    </div>
 
     <footer class="footer">
         <div class="container footer-wrapper">
@@ -113,7 +209,17 @@
     </footer>
 
     <script src="/js/script.js"></script>
+    <script>
+        function openCertModal(src) {
+            const modal = document.getElementById('certModal');
+            const img = document.getElementById('certModalImg');
+            img.src = src;
+            modal.classList.add('open');
+        }
+        function closeCertModal() {
+            const modal = document.getElementById('certModal');
+            modal.classList.remove('open');
+        }
+    </script>
 </body>
 </html>
-
-

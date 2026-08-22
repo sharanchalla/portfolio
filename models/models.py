@@ -48,6 +48,7 @@ class Certificate(db.Model):
     issuing_organization = db.Column(db.String(100), nullable=False)
     issue_date = db.Column(db.String(50), nullable=False)
     credential_url = db.Column(db.String(255), nullable=True)
+    image_url = db.Column(db.String(255), nullable=True)
 
     def to_dict(self):
         return {
@@ -55,7 +56,8 @@ class Certificate(db.Model):
             'title': self.title,
             'issuing_organization': self.issuing_organization,
             'issue_date': self.issue_date,
-            'credential_url': self.credential_url
+            'credential_url': self.credential_url,
+            'image_url': self.image_url
         }
 
 class ContactMessage(db.Model):

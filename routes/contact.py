@@ -6,7 +6,6 @@ contact_bp = Blueprint('contact', __name__)
 @contact_bp.route('/contact', methods=['GET', 'POST'])
 def contact():
     if request.method == 'POST':
-        # Check if request is JSON or form-encoded
         if request.is_json:
             data = request.get_json()
             name = data.get('name')
@@ -32,3 +31,8 @@ def contact():
             return jsonify({'success': False, 'message': f'Failed to send message: {str(e)}'}), 500
 
     return render_template('contact.html')
+
+@contact_bp.route('/api/contact-messages')
+def get_contact_messages():
+    messages = ContactMessage.query.order_by(ContactMessage.created_at.desc()).all()
+    return jsonify([msg.to_dict() for msg in messages])

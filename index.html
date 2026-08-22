@@ -12,30 +12,31 @@
 </head>
 <body class="splash-body">
     <div class="splash-wrapper">
-        <!-- Navbar Header (Transparent) -->
+        <!-- Navbar Header (Transparent, Figma style) -->
         <header class="header transparent-header">
             <div class="container navbar">
                 <a href="/" class="logo splash-logo">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20"/><path d="M12 2v20"/><path d="M4 4l16 16"/><path d="M20 4L4 20"/></svg>
-                    <span>SC</span> <!-- Placeholder as requested from Figma -->
+                    <span>SC</span>
                 </a>
                 
-                <nav class="nav-menu splash-nav" id="navMenu">
-                    <a href="/about" class="nav-link">About me</a>
-                    <a href="/skills" class="nav-link">Skills</a>
-                    <a href="/projects" class="nav-link">Portfolio</a>
-                    <a href="/contact" class="btn btn-nav-contact">CONTACT ME</a>
-                </nav>
+                <div class="splash-header-right">
+                    <nav class="splash-nav" id="navMenu">
+                        <a href="/about" class="nav-link">About me</a>
+                        <a href="/skills" class="nav-link">Skills</a>
+                        <a href="/projects" class="nav-link">Portfolio</a>
+                        <a href="/contact" class="btn-nav-contact">CONTACT ME</a>
+                    </nav>
 
-                <div class="nav-actions">
-                    <!-- Theme toggle is kept but adapted for dark side if needed -->
-                    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
-                        <svg class="moon-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                        <svg class="sun-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-                    </button>
-                    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-                    </button>
+                    <div class="nav-actions">
+                        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
+                            <svg class="moon-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                            <svg class="sun-icon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        </button>
+                        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" style="color: #fff;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -58,10 +59,6 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
                     </a>
                 </div>
-                
-                <div class="splash-cta">
-                    <a href="/projects" class="btn btn-primary btn-get-started">Get Started</a>
-                </div>
             </div>
             
             <div class="splash-visual fade-in delay-2">
@@ -74,5 +71,3 @@
     <script src="/js/script.js"></script>
 </body>
 </html>
-
-

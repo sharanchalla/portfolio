@@ -9,66 +9,6 @@
     <link rel="stylesheet" href="/css/responsive.css">
     <link rel="stylesheet" href="/css/animations.css">
     <style>
-        .filter-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-        .search-bar {
-            max-width: 350px;
-            width: 100%;
-            position: relative;
-        }
-        .search-input {
-            width: 100%;
-            padding: 0.75rem 1rem 0.75rem 2.5rem;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-secondary);
-            color: var(--text-primary);
-            font-family: var(--font-sans);
-            font-size: 0.95rem;
-            transition: var(--transition-fast);
-        }
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px var(--accent-glow);
-        }
-        .search-icon {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            pointer-events: none;
-        }
-        .filter-tags {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-        .filter-btn {
-            background-color: var(--bg-secondary);
-            color: var(--text-secondary);
-            border: 1px solid var(--border-color);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-family: var(--font-sans);
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: var(--transition-fast);
-        }
-        .filter-btn:hover,
-        .filter-btn.active {
-            background-color: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
         .no-projects {
             text-align: center;
             padding: 3rem;
@@ -113,27 +53,11 @@
             <h1 class="section-title">My Projects</h1>
         </div>
 
-        <!-- Filter & Search Bar -->
-        <div class="filter-container slide-up delay-1">
-            <div class="search-bar">
-                <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="searchInput" placeholder="Search projects by title or tech..." class="search-input">
-            </div>
-            
-            <div class="filter-tags" id="filterTags">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="python">Python</button>
-                <button class="filter-btn" data-filter="flask">Flask</button>
-                <button class="filter-btn" data-filter="javascript">JavaScript</button>
-                <button class="filter-btn" data-filter="css">CSS</button>
-            </div>
-        </div>
-
         <!-- Projects Grid -->
         <div class="projects-grid" id="projectsGrid">
             {% if projects %}
                 {% for project in projects %}
-                <article class="project-card slide-up delay-{{ loop.index }}" data-title="{{ project.title|lower }}" data-tech="{{ project.technologies|lower }}">
+                <article class="project-card slide-up delay-{{ loop.index }}">
                     <div class="project-img-wrapper">
                         <img src="{{ project.image_url or 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80' }}" alt="{{ project.title }}">
                     </div>
@@ -179,65 +103,6 @@
     </footer>
 
     <script src="/js/script.js"></script>
-    <script>
-        // Real-time Search and Category Filtering Logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('searchInput');
-            const filterBtns = document.querySelectorAll('.filter-btn');
-            const projectCards = document.querySelectorAll('.project-card');
-
-            let searchVal = '';
-            let currentFilter = 'all';
-
-            const filterProjects = () => {
-                let count = 0;
-                projectCards.forEach(card => {
-                    const title = card.getAttribute('data-title');
-                    const tech = card.getAttribute('data-tech');
-                    
-                    const matchesSearch = title.includes(searchVal) || tech.includes(searchVal);
-                    const matchesFilter = currentFilter === 'all' || tech.includes(currentFilter);
-
-                    if (matchesSearch && matchesFilter) {
-                        card.style.display = 'flex';
-                        count++;
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-
-                // Display empty message if no results
-                let emptyMsg = document.getElementById('emptyFilterMsg');
-                if (count === 0 && projectCards.length > 0) {
-                    if (!emptyMsg) {
-                        emptyMsg = document.createElement('div');
-                        emptyMsg.id = 'emptyFilterMsg';
-                        emptyMsg.className = 'no-projects';
-                        emptyMsg.innerHTML = 'No projects match your search criteria.';
-                        document.getElementById('projectsGrid').appendChild(emptyMsg);
-                    }
-                } else if (emptyMsg) {
-                    emptyMsg.remove();
-                }
-            };
-
-            if (searchInput) {
-                searchInput.addEventListener('input', (e) => {
-                    searchVal = e.target.value.toLowerCase().trim();
-                    filterProjects();
-                });
-            }
-
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    filterBtns.forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                    currentFilter = e.target.getAttribute('data-filter');
-                    filterProjects();
-                });
-            });
-        });
-    </script>
 </body>
 </html>
 
