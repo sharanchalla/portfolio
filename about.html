@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About | Sharan Challa</title>
-    <script src="/js/theme.js"></script>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/responsive.css">
-    <link rel="stylesheet" href="/css/animations.css">
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animations.css">
     <style>
         .about-grid {
             display: grid;
@@ -71,16 +71,17 @@
 <body>
     <header class="header">
         <div class="container navbar">
-            <a href="/" class="logo">
+            <a href="index.html" class="logo">
                 Sharan Challa<span class="logo-dot"></span>
             </a>
             <nav class="nav-menu" id="navMenu">
-                <a href="/" class="nav-link">Home</a>
-                <a href="/about" class="nav-link active">About</a>
-                <a href="/projects" class="nav-link">Projects</a>
-                <a href="/skills" class="nav-link">Skills</a>
-                <a href="/certificates" class="nav-link">Certificates</a>
-                <a href="/contact" class="nav-link">Contact</a>
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link active">About</a>
+                <a href="experience.html" class="nav-link">Experience</a>
+                <a href="projects.html" class="nav-link">Projects</a>
+                <a href="skills.html" class="nav-link">Skills</a>
+                <a href="certificates.html" class="nav-link">Certificates</a>
+                <a href="contact.html" class="nav-link">Contact</a>
             </nav>
             <div class="nav-actions">
                 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
@@ -96,8 +97,8 @@
 
     <main class="container section">
         <div class="section-header slide-up">
-            <span class="section-tag">My Journey</span>
-            <h1 class="section-title">About Me</h1>
+            <span class="section-tag">Academic Background</span>
+            <h1 class="section-title">About Me & Education</h1>
         </div>
 
         <div class="about-grid">
@@ -109,26 +110,29 @@
                 <p>
                     Passionate about problem-solving, clean software architecture, and intelligent web applications. Active NSS Volunteer contributing to sustainable community development initiatives and environmental conservation.
                 </p>
+                <div style="margin-top: 1rem;">
+                    <a href="experience.html" class="btn btn-primary">View Internship Experience &rarr;</a>
+                </div>
             </div>
 
             <div class="slide-in-right delay-1">
-                <h2>Education</h2>
+                <h2>Education & Academic Training</h2>
                 <div class="timeline">
-                    {% if experiences %}
-                        {% for exp in experiences %}
+                    {% if educations %}
+                        {% for edu in educations %}
                         <div class="timeline-item">
-                            <div class="timeline-date">{{ exp.period }}</div>
-                            <h3 class="timeline-title">{{ exp.title }}</h3>
-                            <div class="timeline-subtitle">{{ exp.organization }}</div>
-                            <p class="timeline-desc">{{ exp.description }}</p>
+                            <div class="timeline-date">{{ edu.period }}</div>
+                            <h3 class="timeline-title">{{ edu.title }}</h3>
+                            <div class="timeline-subtitle">{{ edu.organization }}</div>
+                            <p class="timeline-desc">{{ edu.description }}</p>
                         </div>
                         {% endfor %}
                     {% else %}
                         <div class="timeline-item">
-                            <div class="timeline-date">2021 - 2025</div>
-                            <h3 class="timeline-title">Bachelor of Technology in Computer Science</h3>
-                            <div class="timeline-subtitle">Computer Science & Engineering</div>
-                            <p class="timeline-desc">Focused on Data Structures, Algorithms, Software Engineering, Relational Databases (SQL), and AI-Native Full-Stack Development.</p>
+                            <div class="timeline-date">Expected Jan 2027</div>
+                            <h3 class="timeline-title">B.Tech in Electronics and Communication Engineering</h3>
+                            <div class="timeline-subtitle">GIET(A) | Rajahmundry, Andhra Pradesh</div>
+                            <p class="timeline-desc">Specializing in AI-Native Full Stack Development and Cloud Computing. Academic CGPA: 7.88 / 10.0.</p>
                         </div>
                     {% endif %}
                 </div>
@@ -146,8 +150,6 @@
         </div>
     </footer>
 
-    <script src="/js/script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
-
-

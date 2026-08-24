@@ -80,12 +80,12 @@ def seed_data():
     if Project.query.count() == 0:
         projects = [
             Project(
-                title='Smart Helmet System',
-                description='Designed and developed an AI-powered smart helmet system to enhance rider safety and incident prevention. Implemented machine learning accident detection algorithms leveraging sensor data for real-time alerts and integrated backend APIs for data logging, predictive analytics, and emergency notifications.',
-                image_url='/images/smart_helmet.jpg',
+                title='Smart Helmet IoT Hardware System',
+                description='Designed and built an IoT-based physical embedded prototype for motorcycle safety. Integrated Arduino Uno microcontroller, accelerometer/vibration sensors, resistors, buzzers, and accident detection circuitry with real-time cloud data logging and emergency notification APIs.',
+                image_url='/images/smart_helmet_iot.jpg',
                 live_link='https://www.github.com/sharanchalla',
                 repo_link='https://www.github.com/sharanchalla',
-                technologies='IoT, Sensor Integration, Python, AI-Based Detection, ML, REST API'
+                technologies='Arduino, IoT Hardware, Accelerometer, Resistors, Sensors, Circuitry, Python API'
             ),
             Project(
                 title='Personal Portfolio & Admin Platform',
@@ -194,5 +194,4 @@ def seed_data():
 
 if __name__ == '__main__':
     app = create_app()
-    debug_mode = os.environ.get('FLASK_DEBUG', '1') == '1'
-    app.run(host='127.0.0.1', port=5000, debug=debug_mode)
+    app.run(host='127.0.0.1', port=5000, debug=False, use_reloader=False)

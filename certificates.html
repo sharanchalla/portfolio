@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificates | Sharan Challa</title>
-    <script src="/js/theme.js"></script>
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/responsive.css">
-    <link rel="stylesheet" href="/css/animations.css">
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animations.css">
     <style>
         .certificates-grid {
             display: grid;
@@ -128,16 +128,17 @@
 <body>
     <header class="header">
         <div class="container navbar">
-            <a href="/" class="logo">
+            <a href="index.html" class="logo">
                 Sharan Challa<span class="logo-dot"></span>
             </a>
             <nav class="nav-menu" id="navMenu">
-                <a href="/" class="nav-link">Home</a>
-                <a href="/about" class="nav-link">About</a>
-                <a href="/projects" class="nav-link">Projects</a>
-                <a href="/skills" class="nav-link">Skills</a>
-                <a href="/certificates" class="nav-link active">Certificates</a>
-                <a href="/contact" class="nav-link">Contact</a>
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="experience.html" class="nav-link">Experience</a>
+                <a href="projects.html" class="nav-link">Projects</a>
+                <a href="skills.html" class="nav-link">Skills</a>
+                <a href="certificates.html" class="nav-link active">Certificates</a>
+                <a href="contact.html" class="nav-link">Contact</a>
             </nav>
             <div class="nav-actions">
                 <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode">
@@ -157,37 +158,26 @@
             <h1 class="section-title">Licenses & Certifications</h1>
         </div>
 
-        <div class="certificates-grid">
+        <div class="certificates-grid" id="certificatesGrid">
             {% if certificates %}
                 {% for cert in certificates %}
+                {% set cert_src = (cert.image_url.lstrip('/') if cert.image_url else 'images/certificates/oracle_cert.png') %}
                 <article class="cert-card-media slide-up delay-{{ loop.index }}">
-                    <div class="cert-img-container" onclick="openCertModal('{{ cert.image_url or '/images/certificates/oracle_cert.png' }}')">
-                        <img src="{{ cert.image_url or '/images/certificates/oracle_cert.png' }}" alt="{{ cert.title }}">
+                    <div class="cert-img-container" onclick="openCertModal('{{ cert_src }}')">
+                        <img src="{{ cert_src }}" alt="{{ cert.title }}">
                     </div>
                     <div class="cert-body">
                         <h3 class="cert-title">{{ cert.title }}</h3>
                         <p class="cert-org">{{ cert.issuing_organization }}</p>
                         <div class="cert-meta">
                             <span>Issued: {{ cert.issue_date }}</span>
-                            <button onclick="openCertModal('{{ cert.image_url or '/images/certificates/oracle_cert.png' }}')" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Official Image</button>
+                            <button onclick="openCertModal('{{ cert_src }}')" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Image</button>
                         </div>
                     </div>
                 </article>
                 {% endfor %}
             {% else %}
-                <article class="cert-card-media slide-up">
-                    <div class="cert-img-container" onclick="openCertModal('/images/certificates/oracle_cert.png')">
-                        <img src="/images/certificates/oracle_cert.png" alt="Oracle Certified Foundations Associate">
-                    </div>
-                    <div class="cert-body">
-                        <h3 class="cert-title">Oracle Certified Foundations Associate</h3>
-                        <p class="cert-org">Oracle University</p>
-                        <div class="cert-meta">
-                            <span>Issued: October 31, 2025</span>
-                            <button onclick="openCertModal('/images/certificates/oracle_cert.png')" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Image</button>
-                        </div>
-                    </div>
-                </article>
+                <p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 3rem;">No certificates loaded.</p>
             {% endif %}
         </div>
     </main>
@@ -208,7 +198,7 @@
         </div>
     </footer>
 
-    <script src="/js/script.js"></script>
+    <script src="js/script.js"></script>
     <script>
         function openCertModal(src) {
             const modal = document.getElementById('certModal');

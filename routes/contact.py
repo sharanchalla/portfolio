@@ -4,6 +4,8 @@ from models.models import db, ContactMessage
 contact_bp = Blueprint('contact', __name__)
 
 @contact_bp.route('/contact', methods=['GET', 'POST'])
+@contact_bp.route('/contact.html', methods=['GET', 'POST'])
+@contact_bp.route('/contact/submit', methods=['POST'])
 def contact():
     if request.method == 'POST':
         if request.is_json:

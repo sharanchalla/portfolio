@@ -5,17 +5,26 @@ home_bp = Blueprint('home', __name__)
 
 @home_bp.route('/')
 @home_bp.route('/home')
+@home_bp.route('/index.html')
 def home():
     featured_projects = Project.query.order_by(Project.id.desc()).limit(3).all()
     top_skills = Skill.query.limit(6).all()
     return render_template('index.html', projects=featured_projects, skills=top_skills)
 
 @home_bp.route('/about')
+@home_bp.route('/about.html')
 def about():
-    experiences = Experience.query.all()
-    return render_template('about.html', experiences=experiences)
+    educations = Experience.query.filter_by(is_education=True).all()
+    return render_template('about.html', educations=educations)
+
+@home_bp.route('/experience')
+@home_bp.route('/experience.html')
+def experience():
+    internships = Experience.query.filter_by(is_education=False).all()
+    return render_template('experience.html', internships=internships)
 
 @home_bp.route('/skills')
+@home_bp.route('/skills.html')
 def skills():
     all_skills = Skill.query.all()
     categorized_skills = {}
@@ -27,8 +36,9 @@ def skills():
     return render_template('skills.html', categorized_skills=categorized_skills)
 
 @home_bp.route('/certificates')
+@home_bp.route('/certificates.html')
 def certificates():
-    all_certs = Certificate.query.all()
+    all_certs = Certificate.query.order_by(Certificate.id.desc()).all()
     return render_template('certificates.html', certificates=all_certs)
 
 # API Endpoints connecting Frontend AJAX to SQLite database

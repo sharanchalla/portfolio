@@ -4,6 +4,7 @@ from models.models import Project
 project_bp = Blueprint('project', __name__)
 
 @project_bp.route('/projects')
+@project_bp.route('/projects.html')
 def projects():
     all_projects = Project.query.all()
     return render_template('projects.html', projects=all_projects)
