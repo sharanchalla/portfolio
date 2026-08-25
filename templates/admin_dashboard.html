@@ -293,7 +293,12 @@
                         <div style="flex-grow: 1; overflow: hidden;">
                             <div style="font-weight: 700; font-size: 1.05rem;">{{ proj.title }}</div>
                             <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">{{ proj.technologies }}</div>
-                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; margin: 0;">{{ proj.description[:120] }}...</p>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; margin: 0 0 0.35rem 0;">{{ proj.description[:120] }}...</p>
+                            {% if proj.live_link %}
+                                <div><a href="{{ proj.live_link }}" target="_blank" style="color: var(--accent); font-weight: 700; font-size: 0.82rem; text-decoration: none;">🔗 Attached Site: {{ proj.live_link }} ↗</a></div>
+                            {% else %}
+                                <div style="font-size: 0.8rem; color: var(--text-muted); font-style: italic;">No site link attached (Hardware / offline project)</div>
+                            {% endif %}
                         </div>
                         <form action="/admin/projects/delete/{{ proj.id }}" method="POST" onsubmit="return confirm('Permanently delete project &quot;{{ proj.title }}&quot;?');">
                             <button type="submit" class="btn-sm-delete">Delete</button>
@@ -303,7 +308,7 @@
                 </div>
 
                 <div style="background-color: var(--bg-primary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
-                    <h3 style="font-size: 1.1rem; margin-bottom: 1.25rem; font-weight: 700;">+ Add New Project with Photo</h3>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1.25rem; font-weight: 700;">+ Add New Project (with Attached Website Link & Photo)</h3>
                     <form action="/admin/projects/add" method="POST" enctype="multipart/form-data">
                         <div class="form-grid">
                             <input type="text" name="title" placeholder="Project Title *" required class="form-control-studio form-group-full">
@@ -313,9 +318,11 @@
                                 <label class="form-label">📷 Upload Project Photo / Screenshot:</label>
                                 <input type="file" name="image_file" accept="image/*">
                             </div>
-                            <input type="url" name="live_link" placeholder="Live Demo URL (optional)" class="form-control-studio">
-                            <input type="url" name="repo_link" placeholder="GitHub Repository URL (optional)" class="form-control-studio">
-                            <button type="submit" class="btn btn-primary form-group-full" style="padding: 0.75rem; justify-content: center;">+ Publish Project with Photo</button>
+                            <div class="form-group-full">
+                                <label class="form-label">🌐 Deployed Website / Project Site Link (URL):</label>
+                                <input type="url" name="live_link" placeholder="e.g. https://my-app.vercel.app or https://myproject.com (optional)" class="form-control-studio">
+                            </div>
+                            <button type="submit" class="btn btn-primary form-group-full" style="padding: 0.75rem; justify-content: center;">+ Publish Project to Portfolio</button>
                         </div>
                     </form>
                 </div>

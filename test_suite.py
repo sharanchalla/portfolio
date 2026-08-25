@@ -97,20 +97,23 @@ class PortfolioMasterTestSuite(unittest.TestCase):
             'password': 'sharanchalla@29'
         })
 
-        # 1. Update site profile tagline
+        # 1. Update site profile
+        real_bio_p1 = 'Final-year Electronics and Communication Engineering (ECE) student at GIET(A), Rajahmundry with expertise in Python development, AI-Native Full Stack Engineering, and Cloud Computing. Proven hands-on experience in building AI-powered web applications, smart IoT embedded prototypes, and deploying scalable cloud solutions on AWS.'
+        real_bio_p2 = 'Driven by a passion for clean software architecture, RESTful API design, and modern DevOps deployment workflows. Active NSS Volunteer committed to collaborative problem-solving, continuous learning, and creating impactful, high-performance technology solutions.'
+
         res_profile = self.client.post('/admin/profile/update', data={
             'full_name': 'Sharan Challa',
-            'tagline': 'Python Developer & AI-Native Full-Stack Engineer',
+            'tagline': 'Python Developer & AI-Native Full-Stack Developer',
             'hero_intro': 'Hi, I am',
             'about_title': 'AI-Native Full Stack Developer & Cloud Engineer',
-            'about_text_p1': 'Testing bio paragraph 1',
-            'about_text_p2': 'Testing bio paragraph 2',
+            'about_text_p1': real_bio_p1,
+            'about_text_p2': real_bio_p2,
             'email': 'sharanchalla5@gmail.com',
             'phone': '+91 86889 42778',
             'location': 'Rajahmundry, East Godavari Dist., AP, India',
             'github_url': 'https://www.github.com/sharanchalla',
             'linkedin_url': 'https://www.linkedin.com/in/sharan-challa',
-            'nss_text': 'NSS Volunteer'
+            'nss_text': 'Actively participated in agricultural programs, drainage system survey initiatives, and sustainable community development projects as a dedicated NSS Volunteer.'
         }, follow_redirects=True)
         self.assertEqual(res_profile.status_code, 200)
 
@@ -118,7 +121,7 @@ class PortfolioMasterTestSuite(unittest.TestCase):
         index_disk = os.path.join(r'C:\Users\SHARAN\Downloads\portfolio', 'index.html')
         with open(index_disk, 'r', encoding='utf-8') as f:
             disk_content = f.read()
-            self.assertIn('AI-Native Full-Stack Engineer', disk_content)
+            self.assertIn('AI-Native Full-Stack Developer', disk_content)
         print("  [OK] Profile edit synced directly to root index.html file on disk!")
 
         # 2. Add certificate with photo upload & verify delete
