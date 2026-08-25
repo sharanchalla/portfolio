@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-        if (window.location.protocol === 'file:') {
-            var p = window.location.pathname.split(/[\\\/]/).pop().replace('.html', '').toLowerCase();
-            var target = (p === 'index' || p === '') ? '' : p;
-            window.location.replace('http://127.0.0.1:5000/' + target);
-        }
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificates | Sharan Challa</title>
@@ -166,82 +159,22 @@
         </div>
 
         <div class="certificates-grid" id="certificatesGrid">
-            
-            
-            <article class="cert-card-media slide-up delay-1">
-                <div class="cert-img-container" onclick="openCertModal('images/certificates/ascend_cert.png')">
-                    <img src="images/certificates/ascend_cert.png" alt="Certificate of Completion - Public Relations">
+            {% for cert in certificates %}
+            {% set cert_src = (cert.image_url.lstrip('/') if cert.image_url else 'images/certificates/oracle_cert.png') %}
+            <article class="cert-card-media slide-up delay-{{ loop.index }}">
+                <div class="cert-img-container" onclick="openCertModal('{{ cert_src }}')">
+                    <img src="{{ cert_src }}" alt="{{ cert.title }}">
                 </div>
                 <div class="cert-body">
-                    <h3 class="cert-title">Certificate of Completion - Public Relations</h3>
-                    <p class="cert-org">Ascend</p>
+                    <h3 class="cert-title">{{ cert.title }}</h3>
+                    <p class="cert-org">{{ cert.issuing_organization }}</p>
                     <div class="cert-meta">
-                        <span>Issued: April 2026</span>
-                        <button onclick="openCertModal('images/certificates/ascend_cert.png')" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Image</button>
+                        <span>Issued: {{ cert.issue_date }}</span>
+                        <button onclick="openCertModal('{{ cert_src }}')" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Image</button>
                     </div>
                 </div>
             </article>
-            
-            
-            <article class="cert-card-media slide-up delay-2">
-                <div class="cert-img-container" onclick="openCertModal('images/certificates/cisco_data_analytics.png')">
-                    <img src="images/certificates/cisco_data_analytics.png" alt="Data Analytics Essentials">
-                </div>
-                <div class="cert-body">
-                    <h3 class="cert-title">Data Analytics Essentials</h3>
-                    <p class="cert-org">Cisco Networking Academy</p>
-                    <div class="cert-meta">
-                        <span>Issued: 25 May 2026</span>
-                        <button onclick="openCertModal('images/certificates/cisco_data_analytics.png')" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Image</button>
-                    </div>
-                </div>
-            </article>
-            
-            
-            <article class="cert-card-media slide-up delay-3">
-                <div class="cert-img-container" onclick="openCertModal('images/certificates/cisco_completion_cert.png')">
-                    <img src="images/certificates/cisco_completion_cert.png" alt="Certificate of Course Completion - Networking Basics">
-                </div>
-                <div class="cert-body">
-                    <h3 class="cert-title">Certificate of Course Completion - Networking Basics</h3>
-                    <p class="cert-org">Cisco Networking Academy</p>
-                    <div class="cert-meta">
-                        <span>Issued: March 16, 2026</span>
-                        <button onclick="openCertModal('images/certificates/cisco_completion_cert.png')" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Image</button>
-                    </div>
-                </div>
-            </article>
-            
-            
-            <article class="cert-card-media slide-up delay-4">
-                <div class="cert-img-container" onclick="openCertModal('images/certificates/wayspire_cert.png')">
-                    <img src="images/certificates/wayspire_cert.png" alt="Certificate of Internship - Web Development">
-                </div>
-                <div class="cert-body">
-                    <h3 class="cert-title">Certificate of Internship - Web Development</h3>
-                    <p class="cert-org">Wayspire</p>
-                    <div class="cert-meta">
-                        <span>Issued: September 30, 2025</span>
-                        <button onclick="openCertModal('images/certificates/wayspire_cert.png')" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Image</button>
-                    </div>
-                </div>
-            </article>
-            
-            
-            <article class="cert-card-media slide-up delay-5">
-                <div class="cert-img-container" onclick="openCertModal('images/certificates/oracle_cert.png')">
-                    <img src="images/certificates/oracle_cert.png" alt="Oracle Certified Foundations Associate">
-                </div>
-                <div class="cert-body">
-                    <h3 class="cert-title">Oracle Certified Foundations Associate</h3>
-                    <p class="cert-org">Oracle University</p>
-                    <div class="cert-meta">
-                        <span>Issued: October 31, 2025</span>
-                        <button onclick="openCertModal('images/certificates/oracle_cert.png')" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Image</button>
-                    </div>
-                </div>
-            </article>
-            
+            {% endfor %}
         </div>
     </main>
 

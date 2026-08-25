@@ -3,6 +3,41 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
+class SiteProfile(db.Model):
+    __tablename__ = 'site_profile'
+    id = db.Column(db.Integer, primary_key=True)
+    full_name = db.Column(db.String(100), default='Sharan Challa')
+    tagline = db.Column(db.String(150), default='Python Developer & AI-Native Full-Stack Developer')
+    hero_intro = db.Column(db.String(50), default='Hi, I am')
+    about_title = db.Column(db.String(150), default='AI-Native Full Stack Developer & Cloud Engineer')
+    about_text_p1 = db.Column(db.Text, default='Final-year Electronics and Communication Engineering (ECE) student at GIET(A), Rajahmundry with expertise in AI-Native Full Stack Development and Cloud Computing. Hands-on experience building AI-powered applications, smart IoT systems, and deploying scalable solutions on AWS.')
+    about_text_p2 = db.Column(db.Text, default='Passionate about problem-solving, clean software architecture, and intelligent web applications. Active NSS Volunteer contributing to sustainable community development initiatives and environmental conservation.')
+    profile_photo = db.Column(db.String(255), default='images/profile_nobg.png')
+    email = db.Column(db.String(100), default='sharanchalla5@gmail.com')
+    phone = db.Column(db.String(50), default='+91 86889 42778')
+    location = db.Column(db.String(150), default='Rajahmundry, East Godavari Dist., AP, India')
+    github_url = db.Column(db.String(255), default='https://www.github.com/sharanchalla')
+    linkedin_url = db.Column(db.String(255), default='https://www.linkedin.com/in/sharan-challa')
+    nss_text = db.Column(db.Text, default='Actively participated in agricultural programs, drainage system survey initiatives, and sustainable community development projects.')
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'full_name': self.full_name,
+            'tagline': self.tagline,
+            'hero_intro': self.hero_intro,
+            'about_title': self.about_title,
+            'about_text_p1': self.about_text_p1,
+            'about_text_p2': self.about_text_p2,
+            'profile_photo': self.profile_photo,
+            'email': self.email,
+            'phone': self.phone,
+            'location': self.location,
+            'github_url': self.github_url,
+            'linkedin_url': self.linkedin_url,
+            'nss_text': self.nss_text
+        }
+
 class Project(db.Model):
     __tablename__ = 'projects'
     id = db.Column(db.Integer, primary_key=True)

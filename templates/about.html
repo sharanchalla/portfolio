@@ -1,16 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-        if (window.location.protocol === 'file:') {
-            var p = window.location.pathname.split(/[\\\/]/).pop().replace('.html', '').toLowerCase();
-            var target = (p === 'index' || p === '') ? '' : p;
-            window.location.replace('http://127.0.0.1:5000/' + target);
-        }
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About | Sharan Challa</title>
+    <title>About | {{ profile.full_name }}</title>
     <script src="js/theme.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
@@ -79,7 +72,7 @@
     <header class="header">
         <div class="container navbar">
             <a href="index.html" class="logo">
-                Sharan Challa<span class="logo-dot"></span>
+                {{ profile.full_name }}<span class="logo-dot"></span>
             </a>
             <nav class="nav-menu" id="navMenu">
                 <a href="index.html" class="nav-link">Home</a>
@@ -110,9 +103,9 @@
 
         <div class="about-grid">
             <div class="about-text slide-in-left">
-                <h2>AI-Native Full Stack Developer &amp; Cloud Engineer</h2>
-                <p>Testing bio paragraph 1</p>
-                <p>Testing bio paragraph 2</p>
+                <h2>{{ profile.about_title }}</h2>
+                <p>{{ profile.about_text_p1 }}</p>
+                <p>{{ profile.about_text_p2 }}</p>
                 <div style="margin-top: 1rem;">
                     <a href="experience.html" class="btn btn-primary">View Internship Experience &rarr;</a>
                 </div>
@@ -121,35 +114,14 @@
             <div class="slide-in-right delay-1">
                 <h2>Education & Academic Training</h2>
                 <div class="timeline">
-                    
+                    {% for edu in educations %}
                     <div class="timeline-item">
-                        <div class="timeline-date">Expected Graduation: January 2027</div>
-                        <h3 class="timeline-title">B.Tech in Electronics and Communication Engineering</h3>
-                        <div class="timeline-subtitle">GIET(A) | Rajahmundry, Andhra Pradesh</div>
-                        <p class="timeline-desc">Specializing in AI-Native Full Stack Development and Cloud Computing. Academic CGPA: 7.88 / 10.0.</p>
+                        <div class="timeline-date">{{ edu.period }}</div>
+                        <h3 class="timeline-title">{{ edu.title }}</h3>
+                        <div class="timeline-subtitle">{{ edu.organization }}</div>
+                        <p class="timeline-desc">{{ edu.description }}</p>
                     </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">2024 – 2026</div>
-                        <h3 class="timeline-title">AWS DevOps Trainee Program</h3>
-                        <div class="timeline-subtitle">TechWing | Rajahmundry, Andhra Pradesh</div>
-                        <p class="timeline-desc">Hands-on training in cloud infrastructure, AWS service deployment, CI/CD workflows, and containerized application management.</p>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">Completion Year: 2023</div>
-                        <h3 class="timeline-title">Intermediate (Class 12 - MPC)</h3>
-                        <div class="timeline-subtitle">Vijaya Durga Junior College | Rajahmundry, AP</div>
-                        <p class="timeline-desc">Completed Class 12 Intermediate education with an overall score of 82.9%.</p>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-date">Completion Year: 2021</div>
-                        <h3 class="timeline-title">SSC (Class 10)</h3>
-                        <div class="timeline-subtitle">Nagaraja MPL High School | Rajahmundry, AP</div>
-                        <p class="timeline-desc">Completed Secondary School Certificate with a CGPA of 9.2 / 10.0.</p>
-                    </div>
-                    
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -157,10 +129,10 @@
 
     <footer class="footer">
         <div class="container footer-wrapper">
-            <div class="footer-copy">&copy; 2026 Sharan Challa. All rights reserved.</div>
+            <div class="footer-copy">&copy; 2026 {{ profile.full_name }}. All rights reserved.</div>
             <div class="social-links">
-                <a href="https://www.github.com/sharanchalla" target="_blank" class="social-link" aria-label="GitHub"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
-                <a href="https://www.linkedin.com/in/sharan-challa" target="_blank" class="social-link" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
+                <a href="{{ profile.github_url }}" target="_blank" class="social-link" aria-label="GitHub"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg></a>
+                <a href="{{ profile.linkedin_url }}" target="_blank" class="social-link" aria-label="LinkedIn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a>
             </div>
         </div>
     </footer>

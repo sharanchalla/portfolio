@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Site Editor & Admin Studio | Sharan Challa</title>
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding-bottom: 5rem;
+        }
+        .admin-nav {
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.25rem 0;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .admin-nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .admin-badge {
+            background-color: var(--accent-glow);
+            color: var(--accent);
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 1px solid var(--accent);
+        }
+        .tabs-header {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.75rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tab-btn {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .tab-btn:hover, .tab-btn.active {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+        }
+        .studio-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        .studio-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .studio-card-header h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+        .form-label {
+            display: block;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+            color: var(--text-primary);
+        }
+        .form-control-studio {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            transition: var(--transition-fast);
+        }
+        .form-control-studio:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px var(--accent-glow);
+        }
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 0.85rem;
+            gap: 1.25rem;
+        }
+        .item-thumb {
+            width: 54px;
+            height: 54px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid var(--border-color);
+            flex-shrink: 0;
+            background-color: #000;
+        }
+        .btn-sm-delete {
+            background-color: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            padding: 0.45rem 0.95rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            flex-shrink: 0;
+        }
+        .btn-sm-delete:hover {
+            background-color: #ef4444;
+            color: white;
+        }
+        .alert-flash {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            font-weight: 600;
+            background-color: var(--accent-glow);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-nav">
+        <div class="container admin-nav-content">
+            <div style="display: flex; align-items: center; gap: 1.25rem;">
+                <span class="logo" style="font-size: 1.25rem;">{{ profile.full_name }}</span>
+                <span class="admin-badge">Master Site CMS & Editor</span>
+                <a href="/" target="_blank" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">View Public Site &rarr;</a>
+            </div>
+            <div>
+                <a href="/admin/logout" class="btn btn-secondary" style="padding: 0.45rem 1.15rem; font-size: 0.85rem; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);">Sign Out</a>
+            </div>
+        </div>
+    </div>
+
+    <main class="container">
+        {% with messages_flash = get_flashed_messages(with_categories=true) %}
+            {% if messages_flash %}
+                {% for category, msg in messages_flash %}
+                    <div class="alert-flash">
+                        <span>{{ msg }}</span>
+                        <button onclick="this.parentElement.remove()" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: inherit;">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- STUDIO NAVIGATION TABS -->
+        <div class="tabs-header">
+            <button class="tab-btn active" onclick="switchTab('tab-profile')">📌 Profile & Hero</button>
+            <button class="tab-btn" onclick="switchTab('tab-projects')">💻 Projects ({{ projects|length }})</button>
+            <button class="tab-btn" onclick="switchTab('tab-certificates')">📜 Certificates ({{ certificates|length }})</button>
+            <button class="tab-btn" onclick="switchTab('tab-education')">🎓 Education ({{ educations|length }})</button>
+            <button class="tab-btn" onclick="switchTab('tab-experience')">💼 Internships ({{ internships|length }})</button>
+            <button class="tab-btn" onclick="switchTab('tab-skills')">⚡ Skills ({{ skills|length }})</button>
+            <button class="tab-btn" onclick="switchTab('tab-messages')">✉️ Inquiries ({{ messages|length }})</button>
+        </div>
+
+        <!-- 1. PROFILE, HERO & CONTACT TAB -->
+        <div id="tab-profile" class="tab-pane active">
+            <div class="studio-card">
+                <div class="studio-card-header">
+                    <h2>📌 Edit Profile, Bio & Contact Information</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">Changes take effect on Home, About & Contact pages</span>
+                </div>
+                <form action="/admin/profile/update" method="POST" enctype="multipart/form-data">
+                    <div class="form-grid">
+                        <div>
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="full_name" value="{{ profile.full_name }}" required class="form-control-studio">
+                        </div>
+                        <div>
+                            <label class="form-label">Professional Subtitle / Tagline</label>
+                            <input type="text" name="tagline" value="{{ profile.tagline }}" required class="form-control-studio">
+                        </div>
+                        <div class="form-group-full">
+                            <label class="form-label">Hero Greeting (e.g. "Hi, I am")</label>
+                            <input type="text" name="hero_intro" value="{{ profile.hero_intro }}" required class="form-control-studio">
+                        </div>
+                        <div class="form-group-full">
+                            <label class="form-label">About Section Title</label>
+                            <input type="text" name="about_title" value="{{ profile.about_title }}" required class="form-control-studio">
+                        </div>
+                        <div class="form-group-full">
+                            <label class="form-label">About Bio Paragraph 1</label>
+                            <textarea name="about_text_p1" rows="3" required class="form-control-studio">{{ profile.about_text_p1 }}</textarea>
+                        </div>
+                        <div class="form-group-full">
+                            <label class="form-label">About Bio Paragraph 2</label>
+                            <textarea name="about_text_p2" rows="3" required class="form-control-studio">{{ profile.about_text_p2 }}</textarea>
+                        </div>
+                        <div>
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email" value="{{ profile.email }}" required class="form-control-studio">
+                        </div>
+                        <div>
+                            <label class="form-label">Phone Number</label>
+                            <input type="text" name="phone" value="{{ profile.phone }}" required class="form-control-studio">
+                        </div>
+                        <div class="form-group-full">
+                            <label class="form-label">Location / City, Country</label>
+                            <input type="text" name="location" value="{{ profile.location }}" required class="form-control-studio">
+                        </div>
+                        <div>
+                            <label class="form-label">GitHub URL</label>
+                            <input type="url" name="github_url" value="{{ profile.github_url }}" required class="form-control-studio">
+                        </div>
+                        <div>
+                            <label class="form-label">LinkedIn URL</label>
+                            <input type="url" name="linkedin_url" value="{{ profile.linkedin_url }}" required class="form-control-studio">
+                        </div>
+                        <div class="form-group-full">
+                            <label class="form-label">Leadership & Volunteering Details (NSS / Community)</label>
+                            <textarea name="nss_text" rows="2" class="form-control-studio">{{ profile.nss_text }}</textarea>
+                        </div>
+                        <div class="form-group-full" style="background-color: var(--bg-primary); padding: 1.25rem; border-radius: 8px; border: 1px dashed var(--border-color);">
+                            <label class="form-label">📷 Upload New Profile Picture (PNG/JPG):</label>
+                            <input type="file" name="profile_photo_file" accept="image/*">
+                        </div>
+                        <div class="form-group-full">
+                            <button type="submit" class="btn btn-primary" style="padding: 0.85rem 2rem; font-size: 1rem; width: 100%; justify-content: center;">💾 Save Profile & Site Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. PROJECTS TAB -->
+        <div id="tab-projects" class="tab-pane">
+            <div class="studio-card">
+                <div class="studio-card-header">
+                    <h2>💻 Manage Projects</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">{{ projects|length }} projects published</span>
+                </div>
+                <div style="margin-bottom: 2rem;">
+                    {% for proj in projects %}
+                    <div class="item-row">
+                        <img src="{{ proj.image_url.lstrip('/') if proj.image_url else 'images/portfolio_preview.png' }}" class="item-thumb" alt="{{ proj.title }}">
+                        <div style="flex-grow: 1; overflow: hidden;">
+                            <div style="font-weight: 700; font-size: 1.05rem;">{{ proj.title }}</div>
+                            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">{{ proj.technologies }}</div>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; margin: 0;">{{ proj.description[:120] }}...</p>
+                        </div>
+                        <form action="/admin/projects/delete/{{ proj.id }}" method="POST" onsubmit="return confirm('Permanently delete project &quot;{{ proj.title }}&quot;?');">
+                            <button type="submit" class="btn-sm-delete">Delete</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div style="background-color: var(--bg-primary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1.25rem; font-weight: 700;">+ Add New Project with Photo</h3>
+                    <form action="/admin/projects/add" method="POST" enctype="multipart/form-data">
+                        <div class="form-grid">
+                            <input type="text" name="title" placeholder="Project Title *" required class="form-control-studio form-group-full">
+                            <textarea name="description" placeholder="Project Description & Features *" required class="form-control-studio form-group-full" rows="3"></textarea>
+                            <input type="text" name="technologies" placeholder="Tech Stack (e.g. Python, Arduino, Resistors, Flask) *" required class="form-control-studio form-group-full">
+                            <div class="form-group-full" style="background-color: var(--bg-secondary); padding: 0.85rem; border-radius: 6px; border: 1px dashed var(--border-color);">
+                                <label class="form-label">📷 Upload Project Photo / Screenshot:</label>
+                                <input type="file" name="image_file" accept="image/*">
+                            </div>
+                            <input type="url" name="live_link" placeholder="Live Demo URL (optional)" class="form-control-studio">
+                            <input type="url" name="repo_link" placeholder="GitHub Repository URL (optional)" class="form-control-studio">
+                            <button type="submit" class="btn btn-primary form-group-full" style="padding: 0.75rem; justify-content: center;">+ Publish Project with Photo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. CERTIFICATES TAB -->
+        <div id="tab-certificates" class="tab-pane">
+            <div class="studio-card">
+                <div class="studio-card-header">
+                    <h2>📜 Manage Licenses & Certifications</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">{{ certificates|length }} certificates published</span>
+                </div>
+                <div style="margin-bottom: 2rem;">
+                    {% for cert in certificates %}
+                    {% set cert_src = (cert.image_url.lstrip('/') if cert.image_url else 'images/certificates/oracle_cert.png') %}
+                    <div class="item-row">
+                        <img src="{{ cert_src }}" class="item-thumb" alt="{{ cert.title }}">
+                        <div style="flex-grow: 1; overflow: hidden;">
+                            <div style="font-weight: 700; font-size: 1.05rem;">{{ cert.title }}</div>
+                            <div style="font-size: 0.85rem; color: var(--accent);">{{ cert.issuing_organization }} &bull; {{ cert.issue_date }}</div>
+                        </div>
+                        <form action="/admin/certificates/delete/{{ cert.id }}" method="POST" onsubmit="return confirm('Permanently delete certificate &quot;{{ cert.title }}&quot;?');">
+                            <button type="submit" class="btn-sm-delete">Delete</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div style="background-color: var(--bg-primary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1.25rem; font-weight: 700;">+ Add New Certificate with Photo</h3>
+                    <form action="/admin/certificates/add" method="POST" enctype="multipart/form-data">
+                        <div class="form-grid">
+                            <input type="text" name="title" placeholder="Certificate Name (e.g. Data Analytics Essentials) *" required class="form-control-studio form-group-full">
+                            <input type="text" name="issuing_organization" placeholder="Issuing Organization (e.g. Cisco, Oracle) *" required class="form-control-studio">
+                            <input type="text" name="issue_date" placeholder="Issue Date (e.g. 25 May 2026) *" required class="form-control-studio">
+                            <div class="form-group-full" style="background-color: var(--bg-secondary); padding: 0.85rem; border-radius: 6px; border: 1px dashed var(--border-color);">
+                                <label class="form-label">📜 Upload Official Certificate Photo (PNG/JPG):</label>
+                                <input type="file" name="image_file" accept="image/*">
+                            </div>
+                            <input type="url" name="credential_url" placeholder="Verification URL (optional)" class="form-control-studio form-group-full">
+                            <button type="submit" class="btn btn-primary form-group-full" style="padding: 0.75rem; justify-content: center;">+ Publish Certificate with Photo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. EDUCATION TAB -->
+        <div id="tab-education" class="tab-pane">
+            <div class="studio-card">
+                <div class="studio-card-header">
+                    <h2>🎓 Manage Education (About Page)</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">{{ educations|length }} academic entries</span>
+                </div>
+                <div style="margin-bottom: 2rem;">
+                    {% for edu in educations %}
+                    <div class="item-row">
+                        <div style="flex-grow: 1;">
+                            <div style="font-weight: 700; font-size: 1.05rem;">{{ edu.title }}</div>
+                            <div style="font-size: 0.85rem; color: var(--accent); margin-bottom: 0.25rem;">{{ edu.organization }} &bull; {{ edu.period }}</div>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">{{ edu.description }}</p>
+                        </div>
+                        <form action="/admin/experiences/delete/{{ edu.id }}" method="POST" onsubmit="return confirm('Permanently delete &quot;{{ edu.title }}&quot;?');">
+                            <button type="submit" class="btn-sm-delete">Delete</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div style="background-color: var(--bg-primary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1.25rem; font-weight: 700;">+ Add Education Entry</h3>
+                    <form action="/admin/experiences/add" method="POST">
+                        <input type="hidden" name="entry_type" value="education">
+                        <div class="form-grid">
+                            <input type="text" name="title" placeholder="Degree / Certificate Name (e.g. B.Tech in ECE) *" required class="form-control-studio form-group-full">
+                            <input type="text" name="organization" placeholder="College / School Name *" required class="form-control-studio">
+                            <input type="text" name="period" placeholder="Period / Year (e.g. Expected Jan 2027) *" required class="form-control-studio">
+                            <textarea name="description" placeholder="Academic details, CGPA, highlights..." rows="2" class="form-control-studio form-group-full"></textarea>
+                            <button type="submit" class="btn btn-primary form-group-full" style="padding: 0.75rem; justify-content: center;">+ Add to Education Timeline</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. INTERNSHIPS TAB -->
+        <div id="tab-experience" class="tab-pane">
+            <div class="studio-card">
+                <div class="studio-card-header">
+                    <h2>💼 Manage Internships (Experience Page)</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">{{ internships|length }} internship entries</span>
+                </div>
+                <div style="margin-bottom: 2rem;">
+                    {% for exp in internships %}
+                    <div class="item-row">
+                        <div style="flex-grow: 1;">
+                            <div style="font-weight: 700; font-size: 1.05rem;">{{ exp.title }}</div>
+                            <div style="font-size: 0.85rem; color: var(--accent); margin-bottom: 0.25rem;">{{ exp.organization }} &bull; {{ exp.period }}</div>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">{{ exp.description }}</p>
+                        </div>
+                        <form action="/admin/experiences/delete/{{ exp.id }}" method="POST" onsubmit="return confirm('Permanently delete internship &quot;{{ exp.title }}&quot;?');">
+                            <button type="submit" class="btn-sm-delete">Delete</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div style="background-color: var(--bg-primary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1.25rem; font-weight: 700;">+ Add Internship Entry</h3>
+                    <form action="/admin/experiences/add" method="POST">
+                        <input type="hidden" name="entry_type" value="internship">
+                        <div class="form-grid">
+                            <input type="text" name="title" placeholder="Intern Role (e.g. AI Native Full Stack Developer Intern) *" required class="form-control-studio form-group-full">
+                            <input type="text" name="organization" placeholder="Company / Organization *" required class="form-control-studio">
+                            <input type="text" name="period" placeholder="Duration (e.g. May 2026 – July 2026) *" required class="form-control-studio">
+                            <textarea name="description" placeholder="Work highlights, technologies used, deliverables..." rows="2" class="form-control-studio form-group-full"></textarea>
+                            <button type="submit" class="btn btn-primary form-group-full" style="padding: 0.75rem; justify-content: center;">+ Add to Internship Timeline</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. SKILLS TAB -->
+        <div id="tab-skills" class="tab-pane">
+            <div class="studio-card">
+                <div class="studio-card-header">
+                    <h2>⚡ Manage Technical Skills</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">{{ skills|length }} skills active</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    {% for skill in skills %}
+                    <div style="background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.85rem 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 700; font-size: 0.95rem;">{{ skill.name }}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted);">{{ skill.category }}</div>
+                        </div>
+                        <form action="/admin/skills/delete/{{ skill.id }}" method="POST" onsubmit="return confirm('Permanently delete skill &quot;{{ skill.name }}&quot;?');">
+                            <button type="submit" class="btn-sm-delete" style="padding: 0.35rem 0.65rem;">&times;</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div style="background-color: var(--bg-primary); padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+                    <h3 style="font-size: 1.1rem; margin-bottom: 1.25rem; font-weight: 700;">+ Add New Skill</h3>
+                    <form action="/admin/skills/add" method="POST">
+                        <div class="form-grid">
+                            <input type="text" name="name" placeholder="Skill Name (e.g. Docker, PyTorch, C++) *" required class="form-control-studio">
+                            <input type="text" name="category" placeholder="Category (e.g. Programming Languages, AI & ML, Cloud) *" required class="form-control-studio">
+                            <button type="submit" class="btn btn-primary form-group-full" style="padding: 0.75rem; justify-content: center;">+ Add Skill</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. MESSAGES INBOX TAB -->
+        <div id="tab-messages" class="tab-pane">
+            <div class="studio-card">
+                <div class="studio-card-header">
+                    <h2>✉️ Contact Form Inquiries & Messages</h2>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);">{{ messages|length }} messages</span>
+                </div>
+                {% if messages %}
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    {% for msg in messages %}
+                    <div style="background-color: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 8px; padding: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem;">
+                        <div style="flex-grow: 1;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+                                <span><strong>{{ msg.name }}</strong> &lt;<a href="mailto:{{ msg.email }}" style="color: var(--accent);">{{ msg.email }}</a>&gt;</span>
+                                <span>{{ msg.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                            </div>
+                            <div style="font-weight: 700; font-size: 1.1rem; margin-bottom: 0.35rem;">{{ msg.subject }}</div>
+                            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">{{ msg.message }}</p>
+                        </div>
+                        <form action="/admin/messages/delete/{{ msg.id }}" method="POST" onsubmit="return confirm('Permanently delete this inquiry message?');">
+                            <button type="submit" class="btn-sm-delete">Delete</button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div style="text-align: center; padding: 3rem; color: var(--text-muted);">No inquiry messages received yet.</div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            const targetPane = document.getElementById(tabId);
+            if (targetPane) {
+                targetPane.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -4,7 +4,8 @@ from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash, jsonify, current_app
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from models.models import db, User, Project, Skill, Certificate, Experience, ContactMessage
+from models.models import db, User, Project, Skill, Certificate, Experience, ContactMessage, SiteProfile
+from utils.sync_engine import sync_all_static_files
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -22,6 +23,14 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def get_or_create_profile():
+    profile = SiteProfile.query.first()
+    if not profile:
+        profile = SiteProfile()
+        db.session.add(profile)
+        db.session.commit()
+    return profile
+
 @admin_bp.route('/')
 def index():
     if session.get('admin_logged_in'):
@@ -38,13 +47,12 @@ def login():
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '').strip()
 
-        # Match exact username 'sharan challa' (case-insensitive) and password 'sharanchalla@29'
         user = User.query.filter(db.func.lower(User.username) == username.lower()).first()
         
         if user and (check_password_hash(user.password_hash, password) or password == 'sharanchalla@29'):
             session['admin_logged_in'] = True
             session['admin_user'] = user.username
-            flash('Successfully logged into Admin Dashboard!', 'success')
+            flash('Welcome to the Master Site Editor & Admin Studio!', 'success')
             return redirect(url_for('admin.dashboard'))
         else:
             error = 'Invalid Username or Password. Access Denied.'
@@ -61,13 +69,16 @@ def logout():
 @admin_bp.route('/dashboard')
 @login_required
 def dashboard():
+    profile = get_or_create_profile()
     projects = Project.query.order_by(Project.id.desc()).all()
     skills = Skill.query.all()
     certificates = Certificate.query.order_by(Certificate.id.desc()).all()
     educations = Experience.query.filter_by(is_education=True).all()
     internships = Experience.query.filter_by(is_education=False).all()
     messages = ContactMessage.query.order_by(ContactMessage.created_at.desc()).all()
+    
     return render_template('admin_dashboard.html', 
+                           profile=profile,
                            projects=projects, 
                            skills=skills, 
                            certificates=certificates, 
@@ -75,64 +86,93 @@ def dashboard():
                            internships=internships,
                            messages=messages)
 
-# --- SKILLS MANAGEMENT ---
-@admin_bp.route('/skills/add', methods=['POST'])
+# --- 1. PROFILE, HERO & CONTACT DETAILS EDITOR ---
+@admin_bp.route('/profile/update', methods=['POST'])
 @login_required
-def add_skill():
-    name = request.form.get('name', '').strip()
-    category = request.form.get('category', '').strip()
-    proficiency = request.form.get('proficiency', type=int)
+def update_profile():
+    profile = get_or_create_profile()
+    
+    profile.full_name = request.form.get('full_name', profile.full_name).strip()
+    profile.tagline = request.form.get('tagline', profile.tagline).strip()
+    profile.hero_intro = request.form.get('hero_intro', profile.hero_intro).strip()
+    profile.about_title = request.form.get('about_title', profile.about_title).strip()
+    profile.about_text_p1 = request.form.get('about_text_p1', profile.about_text_p1).strip()
+    profile.about_text_p2 = request.form.get('about_text_p2', profile.about_text_p2).strip()
+    profile.email = request.form.get('email', profile.email).strip()
+    profile.phone = request.form.get('phone', profile.phone).strip()
+    profile.location = request.form.get('location', profile.location).strip()
+    profile.github_url = request.form.get('github_url', profile.github_url).strip()
+    profile.linkedin_url = request.form.get('linkedin_url', profile.linkedin_url).strip()
+    profile.nss_text = request.form.get('nss_text', profile.nss_text).strip()
 
-    if name and category:
-        skill = Skill(name=name, category=category, proficiency=proficiency or 90)
-        db.session.add(skill)
-        db.session.commit()
-        flash(f'Skill "{name}" added successfully!', 'success')
-    return redirect(url_for('admin.dashboard'))
+    # Direct profile photo upload
+    file = request.files.get('profile_photo_file')
+    if file and file.filename != '' and allowed_file(file.filename):
+        filename = f"profile_{int(time.time())}_{secure_filename(file.filename)}"
+        save_path = os.path.join(current_app.root_path, 'images', filename)
+        file.save(save_path)
+        profile.profile_photo = f"images/{filename}"
 
-@admin_bp.route('/skills/delete/<int:skill_id>', methods=['POST'])
-@login_required
-def delete_skill(skill_id):
-    skill = Skill.query.get_or_404(skill_id)
-    name = skill.name
-    db.session.delete(skill)
     db.session.commit()
-    flash(f'Skill "{name}" permanently removed.', 'success')
+    sync_all_static_files(current_app._get_current_object())
+    flash('Site Profile, Bio & Contact Information updated successfully across the entire site!', 'success')
     return redirect(url_for('admin.dashboard'))
 
-# --- PROJECTS MANAGEMENT WITH PHOTO UPLOAD ---
+# --- 2. PROJECTS CRUD ---
 @admin_bp.route('/projects/add', methods=['POST'])
 @login_required
 def add_project():
     title = request.form.get('title', '').strip()
     description = request.form.get('description', '').strip()
     technologies = request.form.get('technologies', '').strip()
-    image_url = request.form.get('image_url', '').strip()
     live_link = request.form.get('live_link', '').strip()
     repo_link = request.form.get('repo_link', '').strip()
+    image_url = 'images/portfolio_preview.png'
 
-    # Handle direct photo file upload
     file = request.files.get('image_file')
     if file and file.filename != '' and allowed_file(file.filename):
         filename = f"proj_{int(time.time())}_{secure_filename(file.filename)}"
         save_dir = os.path.join(current_app.root_path, 'images')
         os.makedirs(save_dir, exist_ok=True)
-        file_path = os.path.join(save_dir, filename)
-        file.save(file_path)
-        image_url = f"/images/{filename}"
+        file.save(os.path.join(save_dir, filename))
+        image_url = f"images/{filename}"
 
     if title and description:
         proj = Project(
             title=title,
             description=description,
             technologies=technologies or 'Python, Full Stack',
-            image_url=image_url or '/images/portfolio_preview.png',
+            image_url=image_url,
             live_link=live_link,
             repo_link=repo_link
         )
         db.session.add(proj)
         db.session.commit()
+        sync_all_static_files(current_app._get_current_object())
         flash(f'Project "{title}" added with photo!', 'success')
+    return redirect(url_for('admin.dashboard'))
+
+@admin_bp.route('/projects/edit/<int:project_id>', methods=['POST'])
+@login_required
+def edit_project(project_id):
+    proj = Project.query.get_or_404(project_id)
+    proj.title = request.form.get('title', proj.title).strip()
+    proj.description = request.form.get('description', proj.description).strip()
+    proj.technologies = request.form.get('technologies', proj.technologies).strip()
+    proj.live_link = request.form.get('live_link', proj.live_link).strip()
+    proj.repo_link = request.form.get('repo_link', proj.repo_link).strip()
+
+    file = request.files.get('image_file')
+    if file and file.filename != '' and allowed_file(file.filename):
+        filename = f"proj_{int(time.time())}_{secure_filename(file.filename)}"
+        save_dir = os.path.join(current_app.root_path, 'images')
+        os.makedirs(save_dir, exist_ok=True)
+        file.save(os.path.join(save_dir, filename))
+        proj.image_url = f"images/{filename}"
+
+    db.session.commit()
+    sync_all_static_files(current_app._get_current_object())
+    flash(f'Project "{proj.title}" updated successfully!', 'success')
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/projects/delete/<int:project_id>', methods=['POST'])
@@ -142,10 +182,11 @@ def delete_project(project_id):
     title = proj.title
     db.session.delete(proj)
     db.session.commit()
+    sync_all_static_files(current_app._get_current_object())
     flash(f'Project "{title}" permanently removed from portfolio.', 'success')
     return redirect(url_for('admin.dashboard'))
 
-# --- CERTIFICATES MANAGEMENT WITH PHOTO UPLOAD ---
+# --- 3. CERTIFICATES CRUD ---
 @admin_bp.route('/certificates/add', methods=['POST'])
 @login_required
 def add_certificate():
@@ -153,17 +194,15 @@ def add_certificate():
     organization = request.form.get('issuing_organization', '').strip()
     issue_date = request.form.get('issue_date', '').strip()
     credential_url = request.form.get('credential_url', '').strip()
-    image_url = request.form.get('image_url', '').strip()
+    image_url = 'images/certificates/oracle_cert.png'
 
-    # Handle direct certificate image file upload
     file = request.files.get('image_file')
     if file and file.filename != '' and allowed_file(file.filename):
         filename = f"cert_{int(time.time())}_{secure_filename(file.filename)}"
         save_dir = os.path.join(current_app.root_path, 'images', 'certificates')
         os.makedirs(save_dir, exist_ok=True)
-        file_path = os.path.join(save_dir, filename)
-        file.save(file_path)
-        image_url = f"/images/certificates/{filename}"
+        file.save(os.path.join(save_dir, filename))
+        image_url = f"images/certificates/{filename}"
 
     if title and organization:
         cert = Certificate(
@@ -171,11 +210,34 @@ def add_certificate():
             issuing_organization=organization,
             issue_date=issue_date or '2026',
             credential_url=credential_url,
-            image_url=image_url or '/images/certificates/oracle_cert.png'
+            image_url=image_url
         )
         db.session.add(cert)
         db.session.commit()
+        sync_all_static_files(current_app._get_current_object())
         flash(f'Certificate "{title}" added with official image!', 'success')
+    return redirect(url_for('admin.dashboard'))
+
+@admin_bp.route('/certificates/edit/<int:cert_id>', methods=['POST'])
+@login_required
+def edit_certificate(cert_id):
+    cert = Certificate.query.get_or_404(cert_id)
+    cert.title = request.form.get('title', cert.title).strip()
+    cert.issuing_organization = request.form.get('issuing_organization', cert.issuing_organization).strip()
+    cert.issue_date = request.form.get('issue_date', cert.issue_date).strip()
+    cert.credential_url = request.form.get('credential_url', cert.credential_url).strip()
+
+    file = request.files.get('image_file')
+    if file and file.filename != '' and allowed_file(file.filename):
+        filename = f"cert_{int(time.time())}_{secure_filename(file.filename)}"
+        save_dir = os.path.join(current_app.root_path, 'images', 'certificates')
+        os.makedirs(save_dir, exist_ok=True)
+        file.save(os.path.join(save_dir, filename))
+        cert.image_url = f"images/certificates/{filename}"
+
+    db.session.commit()
+    sync_all_static_files(current_app._get_current_object())
+    flash(f'Certificate "{cert.title}" updated successfully!', 'success')
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/certificates/delete/<int:cert_id>', methods=['POST'])
@@ -185,10 +247,11 @@ def delete_certificate(cert_id):
     title = cert.title
     db.session.delete(cert)
     db.session.commit()
+    sync_all_static_files(current_app._get_current_object())
     flash(f'Certificate "{title}" permanently removed.', 'success')
     return redirect(url_for('admin.dashboard'))
 
-# --- EDUCATION & INTERNSHIP MANAGEMENT ---
+# --- 4. EDUCATION & INTERNSHIP CRUD ---
 @admin_bp.route('/experiences/add', methods=['POST'])
 @login_required
 def add_experience():
@@ -209,8 +272,24 @@ def add_experience():
         )
         db.session.add(exp)
         db.session.commit()
+        sync_all_static_files(current_app._get_current_object())
         kind = "Education" if is_education else "Internship"
         flash(f'{kind} entry "{title}" added successfully!', 'success')
+    return redirect(url_for('admin.dashboard'))
+
+@admin_bp.route('/experiences/edit/<int:exp_id>', methods=['POST'])
+@login_required
+def edit_experience(exp_id):
+    exp = Experience.query.get_or_404(exp_id)
+    exp.title = request.form.get('title', exp.title).strip()
+    exp.organization = request.form.get('organization', exp.organization).strip()
+    exp.period = request.form.get('period', exp.period).strip()
+    exp.description = request.form.get('description', exp.description).strip()
+    
+    db.session.commit()
+    sync_all_static_files(current_app._get_current_object())
+    kind = "Education" if exp.is_education else "Internship"
+    flash(f'{kind} entry "{exp.title}" updated successfully!', 'success')
     return redirect(url_for('admin.dashboard'))
 
 @admin_bp.route('/experiences/delete/<int:exp_id>', methods=['POST'])
@@ -221,10 +300,38 @@ def delete_experience(exp_id):
     kind = "Education" if exp.is_education else "Internship"
     db.session.delete(exp)
     db.session.commit()
+    sync_all_static_files(current_app._get_current_object())
     flash(f'{kind} entry "{title}" permanently removed.', 'success')
     return redirect(url_for('admin.dashboard'))
 
-# --- CONTACT MESSAGES MANAGEMENT ---
+# --- 5. SKILLS CRUD ---
+@admin_bp.route('/skills/add', methods=['POST'])
+@login_required
+def add_skill():
+    name = request.form.get('name', '').strip()
+    category = request.form.get('category', '').strip()
+    proficiency = request.form.get('proficiency', type=int)
+
+    if name and category:
+        skill = Skill(name=name, category=category, proficiency=proficiency or 90)
+        db.session.add(skill)
+        db.session.commit()
+        sync_all_static_files(current_app._get_current_object())
+        flash(f'Skill "{name}" added successfully!', 'success')
+    return redirect(url_for('admin.dashboard'))
+
+@admin_bp.route('/skills/delete/<int:skill_id>', methods=['POST'])
+@login_required
+def delete_skill(skill_id):
+    skill = Skill.query.get_or_404(skill_id)
+    name = skill.name
+    db.session.delete(skill)
+    db.session.commit()
+    sync_all_static_files(current_app._get_current_object())
+    flash(f'Skill "{name}" permanently removed.', 'success')
+    return redirect(url_for('admin.dashboard'))
+
+# --- 6. CONTACT MESSAGES ---
 @admin_bp.route('/messages/delete/<int:msg_id>', methods=['POST'])
 @login_required
 def delete_message(msg_id):

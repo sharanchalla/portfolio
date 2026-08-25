@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-        if (window.location.protocol === 'file:') {
-            var p = window.location.pathname.split(/[\\\/]/).pop().replace('.html', '').toLowerCase();
-            var target = (p === 'index' || p === '') ? '' : p;
-            window.location.replace('http://127.0.0.1:5000/' + target);
-        }
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skills | Sharan Challa</title>
@@ -117,131 +110,21 @@
         </div>
 
         <div class="skills-grid">
-            
-            <div class="skill-category-card slide-up delay-1">
+            {% for category, skills in categorized_skills.items() %}
+            <div class="skill-category-card slide-up delay-{{ loop.index }}">
                 <h2 class="skill-category-title">
-                    <span>Programming Languages</span>
+                    <span>{{ category }}</span>
                 </h2>
                 <div class="skill-tags-container">
-                    
+                    {% for skill in skills %}
                     <div class="skill-badge">
                         <span class="skill-badge-dot"></span>
-                        <span>Python</span>
+                        <span>{{ skill.name }}</span>
                     </div>
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>JavaScript</span>
-                    </div>
-                    
+                    {% endfor %}
                 </div>
             </div>
-            
-            <div class="skill-category-card slide-up delay-2">
-                <h2 class="skill-category-title">
-                    <span>AI &amp; Machine Learning</span>
-                </h2>
-                <div class="skill-tags-container">
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>AI-Native Development</span>
-                    </div>
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>Machine Learning Fundamentals</span>
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="skill-category-card slide-up delay-3">
-                <h2 class="skill-category-title">
-                    <span>Web Technologies</span>
-                </h2>
-                <div class="skill-tags-container">
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>Full Stack Development</span>
-                    </div>
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>HTML5 / CSS3 / JavaScript</span>
-                    </div>
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>Flask / Python Backend</span>
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="skill-category-card slide-up delay-4">
-                <h2 class="skill-category-title">
-                    <span>Cloud &amp; Infrastructure</span>
-                </h2>
-                <div class="skill-tags-container">
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>AWS (Amazon Web Services)</span>
-                    </div>
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>Cloud Computing &amp; Deployment</span>
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="skill-category-card slide-up delay-5">
-                <h2 class="skill-category-title">
-                    <span>Developer Tools</span>
-                </h2>
-                <div class="skill-tags-container">
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>GitHub &amp; Version Control</span>
-                    </div>
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>VS Code &amp; Development Environments</span>
-                    </div>
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>IoT Integration</span>
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="skill-category-card slide-up delay-6">
-                <h2 class="skill-category-title">
-                    <span>Soft Skills</span>
-                </h2>
-                <div class="skill-tags-container">
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>Problem-Solving &amp; Adaptability</span>
-                    </div>
-                    
-                    <div class="skill-badge">
-                        <span class="skill-badge-dot"></span>
-                        <span>Teamwork &amp; Communication</span>
-                    </div>
-                    
-                </div>
-            </div>
-            
+            {% endfor %}
         </div>
     </main>
 

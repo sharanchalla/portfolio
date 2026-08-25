@@ -1,11 +1,11 @@
 import os
 from flask import Flask
 from config import Config
-from models.models import db, Project, Skill, Certificate, Experience, User
+from models.models import db, Project, Skill, Certificate, Experience, User, SiteProfile
 from werkzeug.security import generate_password_hash
 
 def create_app():
-    app = Flask(__name__, template_folder='.', static_folder='.', static_url_path='')
+    app = Flask(__name__, template_folder='templates', static_folder='.', static_url_path='')
     app.config.from_object(Config)
 
     db.init_app(app)
@@ -33,6 +33,12 @@ def create_app():
     return app
 
 def seed_data():
+    # Seed SiteProfile default settings
+    profile = SiteProfile.query.first()
+    if not profile:
+        profile = SiteProfile()
+        db.session.add(profile)
+
     # Seed Admin User with username 'sharan challa' and password 'sharanchalla@29'
     user = User.query.filter(db.func.lower(User.username) == 'sharan challa').first()
     if not user:

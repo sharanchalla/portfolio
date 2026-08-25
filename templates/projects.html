@@ -1,13 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script>
-        if (window.location.protocol === 'file:') {
-            var p = window.location.pathname.split(/[\\\/]/).pop().replace('.html', '').toLowerCase();
-            var target = (p === 'index' || p === '') ? '' : p;
-            window.location.replace('http://127.0.0.1:5000/' + target);
-        }
-    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects | Sharan Challa</title>
@@ -63,89 +56,40 @@
 
         <!-- Projects Grid -->
         <div class="projects-grid" id="projectsGrid">
-            
-                
-                <article class="project-card slide-up delay-1">
+            {% if projects %}
+                {% for project in projects %}
+                <article class="project-card slide-up delay-{{ loop.index }}">
                     <div class="project-img-wrapper">
-                        <img src="images/portfolio_preview.png" alt="Personal Portfolio &amp; Admin Platform">
+                        <img src="{{ (project.image_url.lstrip('/') if project.image_url else 'images/portfolio_preview.png') }}" alt="{{ project.title }}">
                     </div>
                     <div class="project-details">
                         <div class="project-tech">
-                            
-                                <span class="tech-tag">Python</span>
-                            
-                                <span class="tech-tag">Flask</span>
-                            
-                                <span class="tech-tag">SQLite</span>
-                            
-                                <span class="tech-tag">JavaScript</span>
-                            
-                                <span class="tech-tag">HTML5</span>
-                            
-                                <span class="tech-tag">CSS3</span>
-                            
+                            {% for tech in project.technologies.split(',') %}
+                                <span class="tech-tag">{{ tech.strip() }}</span>
+                            {% endfor %}
                         </div>
-                        <h3 class="project-card-title">Personal Portfolio &amp; Admin Platform</h3>
-                        <p class="project-desc">Developed a responsive portfolio application with dynamic SQL database models, session-secured admin control panel, custom Flask blueprint routing, and modern UI/UX principles for showcasing projects, skills, and resume credentials.</p>
+                        <h3 class="project-card-title">{{ project.title }}</h3>
+                        <p class="project-desc">{{ project.description }}</p>
                         <div class="project-links">
-                            
-                                <a href="http://127.0.0.1:5000" target="_blank" class="project-link">
+                            {% if project.live_link %}
+                                <a href="{{ project.live_link }}" target="_blank" class="project-link">
                                     Demo
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                                 </a>
-                            
-                            
-                                <a href="https://www.github.com/sharanchalla" target="_blank" class="project-link">
+                            {% endif %}
+                            {% if project.repo_link %}
+                                <a href="{{ project.repo_link }}" target="_blank" class="project-link">
                                     GitHub
                                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                                 </a>
-                            
+                            {% endif %}
                         </div>
                     </div>
                 </article>
-                
-                <article class="project-card slide-up delay-2">
-                    <div class="project-img-wrapper">
-                        <img src="images/smart_helmet_iot.jpg" alt="Smart Helmet IoT Hardware System">
-                    </div>
-                    <div class="project-details">
-                        <div class="project-tech">
-                            
-                                <span class="tech-tag">Arduino</span>
-                            
-                                <span class="tech-tag">IoT Hardware</span>
-                            
-                                <span class="tech-tag">Accelerometer</span>
-                            
-                                <span class="tech-tag">Resistors</span>
-                            
-                                <span class="tech-tag">Sensors</span>
-                            
-                                <span class="tech-tag">Circuitry</span>
-                            
-                                <span class="tech-tag">Python API</span>
-                            
-                        </div>
-                        <h3 class="project-card-title">Smart Helmet IoT Hardware System</h3>
-                        <p class="project-desc">Designed and built an IoT-based physical embedded prototype for motorcycle safety. Integrated Arduino Uno microcontroller, accelerometer/vibration sensors, resistors, buzzers, and accident detection circuitry with real-time cloud data logging and emergency notification APIs.</p>
-                        <div class="project-links">
-                            
-                                <a href="https://www.github.com/sharanchalla" target="_blank" class="project-link">
-                                    Demo
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                                </a>
-                            
-                            
-                                <a href="https://www.github.com/sharanchalla" target="_blank" class="project-link">
-                                    GitHub
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                                </a>
-                            
-                        </div>
-                    </div>
-                </article>
-                
-            
+                {% endfor %}
+            {% else %}
+                <div class="no-projects">No projects loaded from database yet.</div>
+            {% endif %}
         </div>
     </main>
 

@@ -1,12 +1,21 @@
 from flask import Blueprint, render_template, request, jsonify
-from models.models import db, ContactMessage
+from models.models import db, ContactMessage, SiteProfile
 
 contact_bp = Blueprint('contact', __name__)
+
+def get_profile():
+    profile = SiteProfile.query.first()
+    if not profile:
+        profile = SiteProfile()
+        db.session.add(profile)
+        db.session.commit()
+    return profile
 
 @contact_bp.route('/contact', methods=['GET', 'POST'])
 @contact_bp.route('/contact.html', methods=['GET', 'POST'])
 @contact_bp.route('/contact/submit', methods=['POST'])
 def contact():
+    profile = get_profile()
     if request.method == 'POST':
         if request.is_json:
             data = request.get_json()
@@ -32,7 +41,7 @@ def contact():
             db.session.rollback()
             return jsonify({'success': False, 'message': f'Failed to send message: {str(e)}'}), 500
 
-    return render_template('contact.html')
+    return render_template('contact.html', profile=profile)
 
 @contact_bp.route('/api/contact-messages')
 def get_contact_messages():
